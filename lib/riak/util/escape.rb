@@ -53,10 +53,10 @@ module Riak
       def escape(bucket_or_key)
         if Riak.escaper == URI
           Riak.escaper.escape(bucket_or_key.to_s).
-            gsub(" ", "%20").gsub("+", "%2B").gsub("/", "%2F").
-            gsub("[", "%5B").gsub("]", "%5D")
+            gsub(/[ \+\/\[\]]/, { " " => "%20", "+" => "%2B", "/" => "%2F", "[" => "%5B", "]" => "%5D"})
         else #CGI
-          Riak.escaper.escape(bucket_or_key.to_s).gsub("+", "%20").gsub('/', "%2F")
+          Riak.escaper.escape(bucket_or_key.to_s).
+            gsub(/[\+\/]/, { "+" => "%20", "/" => "%2F" })
         end
       end
 
